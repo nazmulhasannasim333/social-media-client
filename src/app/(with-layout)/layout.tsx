@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import LeftSide from "../components/LeftSide/page";
+import RightSide from "../components/RightSide/page";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,7 @@ const WithLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="grid lg:grid-cols-8 grid-cols-1">
           <LeftSide />
           {children}
-          {/* <RightSide /> */}
+          <RightSide />
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ const NavLink = ({
   ...props
 }: NavLinkProps) => {
   const user = useAppSelector(selectCurrentUser);
-  console.log(user);
+  // console.log(user);
 
   const path = usePathname();
   const active = exact ? path === href : path && path.startsWith(href);

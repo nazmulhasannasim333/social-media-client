@@ -1,18 +1,19 @@
-"use client";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import Navbar from "../Navbar";
 import { logout, selectCurrentUser } from "@/redux/features/auth/authSlice";
-import Link from "next/link";
-import { toast } from "sonner";
-import Image from "next/image";
 import { useGetMeQuery } from "@/redux/features/user/userApi";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import { FaFacebookMessenger, FaHome, FaRegBell } from "react-icons/fa";
+import { toast } from "sonner";
 import avatar from "../../../../public/images/avatar.png";
 
-const LeftSide = () => {
+const MobileMenu = () => {
   const user = useAppSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
   const { data: getMe } = useGetMeQuery(undefined);
 
+  // handle logout
   const handleLogout = () => {
     const toastId = toast.loading("loading...");
     dispatch(logout());
@@ -20,29 +21,29 @@ const LeftSide = () => {
   };
 
   return (
-    <div className="lg:col-span-2 lg:flex flex-col justify-between h-screen text-white py-4 sticky top-0 overflow-hidden hidden">
-      {/*left menu*/}
-      <Navbar />
+    <nav className="lg:hidden fixed z-[999] flex justify-between items-center gap-5 bg-blue-400 px-6 py-3 backdrop-blur-md w-full rounded-full text-dark_primary duration-300 bottom-0">
+      <Link href="/" className="text-xl p-2.5 rounded-full sm:cursor-pointer">
+        <FaHome />
+      </Link>
+      <Link href="/" className="text-xl p-2.5 rounded-full sm:cursor-pointer">
+        <FaRegBell />
+      </Link>
+      <Link href="/" className="text-xl p-2.5 rounded-full sm:cursor-pointer">
+        <FaFacebookMessenger />
+      </Link>
+
       <div className="dropdown dropdown-top">
         <div className="flex items-center">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-            <div className="w-10 rounded-full ">
+            <div className="w-8 rounded-full">
               <Image
-                width={50}
-                height={50}
+                width={100}
+                height={100}
                 src={getMe?.data?.profileImg ? getMe?.data?.profileImg : avatar}
                 alt="Profile Image"
               />
             </div>
           </label>
-          <div className="ml-3">
-            <p className="text-base leading-6 font-medium text-white">
-              {user && user?.name ? user?.name : "Your Name"}
-            </p>
-            <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-              @{user && user?.username ? user?.username : "demo_username"}
-            </p>
-          </div>
         </div>
         <ul
           tabIndex={0}
@@ -62,8 +63,8 @@ const LeftSide = () => {
           </li>
         </ul>
       </div>
-    </div>
+    </nav>
   );
 };
 
-export default LeftSide;
+export default MobileMenu;
