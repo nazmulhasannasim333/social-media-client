@@ -3,18 +3,22 @@ import { baseApi } from "../../api/baseApi";
 const postApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     allPost: builder.query({
-      query: () => ({
-        url: "posts/get-all-posts",
-        method: "GET",
-      }),
+      query: () => {
+        return {
+          url: "posts/get-all-posts",
+          method: "GET",
+        };
+      },
       providesTags: ["posts"],
     }),
     createPost: builder.mutation({
-      query: (postData) => ({
-        url: "posts/create-post",
-        method: "POST",
-        body: postData,
-      }),
+      query: (postData) => {
+        return {
+          url: "posts/create-post",
+          method: "POST",
+          body: postData,
+        };
+      },
       invalidatesTags: ["posts"],
     }),
     deletePost: builder.mutation({
@@ -25,12 +29,11 @@ const postApi = baseApi.injectEndpoints({
       invalidatesTags: ["posts"],
     }),
     updatePost: builder.mutation({
-      query: (post) => {
-        console.log(post);
+      query: ({ postId, postText }) => {
         return {
-          url: `posts/update-post/${post.postId}`,
+          url: `posts/update-post/${postId}`,
           method: "PUT",
-          body: post.postText,
+          body: { postText },
         };
       },
       invalidatesTags: ["posts"],

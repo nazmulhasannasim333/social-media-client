@@ -12,7 +12,12 @@ interface PostModalProps {
   setEditModes: (postId: string) => void;
 }
 
-const PostModal: React.FC<PostModalProps> = ({ isOpen, setIsOpen, post }) => {
+const PostModal: React.FC<PostModalProps> = ({
+  isOpen,
+  setIsOpen,
+  post,
+  setEditModes,
+}) => {
   const [inputValue, setInputValue] = useState("");
   const closeModal = () => {
     setIsOpen(false);
@@ -22,20 +27,20 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, setIsOpen, post }) => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data: FieldValues) => {
-    console.log(data);
-    const postData = {
+    const res: any = await updatePost({
       postText: data.tweetText,
       postId: post._id,
-    };
-    const res: any = await updatePost(postData);
+    });
     if (res?.error) {
       toast.error(`Something went wrong`, {
         duration: 2000,
       });
     } else {
-      toast.success("Post deleted successfully!", {
+      toast.success("Post updated successfully!", {
         duration: 2000,
       });
+      setIsOpen(false);
+      setEditModes(post._id);
     }
   };
 
