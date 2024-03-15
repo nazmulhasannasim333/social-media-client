@@ -2,16 +2,28 @@
 import { useAllPostQuery } from "@/redux/features/post/postApi";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import avatar from "../../../public/images/avatar.png";
 import verified from "../../../public/images/verified.png";
 import moment from "moment";
 import { TPost } from "@/types/types";
 
 import Comment from "./Comment";
+import EditPost from "./EditPost";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 const AllPosts = () => {
+  const user = useAppSelector(selectCurrentUser);
   const { data: posts, isFetching } = useAllPostQuery(undefined);
+  const [toggleEdit, setToggleEdit] = useState(false);
+
+  // handle "Edit" button click
+  const handleEditClick = (post: TPost) => {
+    if (post?.userId?._id === user?.userId) {
+      setToggleEdit(!toggleEdit);
+    }
+  };
 
   // Loading Skeleton
   if (isFetching) {
@@ -115,17 +127,12 @@ const AllPosts = () => {
               </div>
             </div>
             <div
-              //   onClick={() => handleEditClick(post._id)}
+              onClick={() => handleEditClick(post)}
               className="font-semibold text-xl hover:cursor-pointer hover:text-blue-400"
             >
               ...
             </div>
-            {/* <EditPost 
-                  editModes={editModes[post._id] || false}
-                  setEditModes={(postId) => handleEditClick(postId)}
-                  post={post}
-                  refetch={refetch}
-                /> */}
+            {toggleEdit && <EditPost post={post} />}
           </div>
           <div className="pl-16 pr-2">
             <p
