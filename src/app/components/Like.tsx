@@ -1,24 +1,39 @@
 "use client";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import {
+  useCheckPostLikeQuery,
   useCreateLikeMutation,
   useRemoveLikeMutation,
   useTotalLikesQuery,
 } from "@/redux/features/like/likeApi";
 import { useAppSelector } from "@/redux/hooks";
+import { TPost } from "@/types/types";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import Swal from "sweetalert2";
 
-const Like = ({ post }) => {
+type PostPops = {
+  post: TPost;
+};
+
+const Like = ({ post }: PostPops) => {
   const user = useAppSelector(selectCurrentUser);
   const router = useRouter();
   const [createLike] = useCreateLikeMutation();
   const [removeLike] = useRemoveLikeMutation();
-  const { data: totalLikes } = useTotalLikesQuery(post._id);
+  const { data: totalLikes } = useTotalLikesQuery(post?._id);
+  const { data: checkPostLiked } = useCheckPostLikeQuery(user?.userId || "");
   const [isLiked, setIsLiked] = useState(false);
 
+  //  check current logged user liked witch posts
+  useEffect(() => {
+    const likedPosts = checkPostLiked?.data?.map((like: any) => like);
+    const checkLike = likedPosts?.includes(post._id);
+    setIsLiked(checkLike);
+  }, [checkPostLiked, post._id]);
+
+  // handle liked and remove liked
   const handleLikeButton = async (postId: string) => {
     if (!user) {
       Swal.fire({

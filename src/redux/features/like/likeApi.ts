@@ -26,6 +26,15 @@ const likeApi = baseApi.injectEndpoints({
       },
       providesTags: ["likes"],
     }),
+    checkPostLike: builder.query({
+      query: (userId: string) => {
+        return {
+          url: `likes/check-liked/${userId}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["likes"],
+    }),
   }),
 });
 
@@ -33,4 +42,5 @@ export const {
   useCreateLikeMutation,
   useRemoveLikeMutation,
   useTotalLikesQuery,
+  useCheckPostLikeQuery,
 } = likeApi;

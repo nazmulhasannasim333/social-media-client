@@ -13,8 +13,13 @@ import Picker from "@emoji-mart/react";
 import { useGetMeQuery } from "@/redux/features/user/userApi";
 import avatar from "../../../public/images/avatar.png";
 import Like from "./Like";
+import { TPost } from "@/types/types";
 
-const Comment = ({ post }) => {
+type PostPops = {
+  post: TPost;
+};
+
+const Comment = ({ post }: PostPops) => {
   const { data: getMe } = useGetMeQuery(undefined);
   const [showComment, setShowComment] = useState(false);
   const [inputValue, setInputValue] = useState("");
