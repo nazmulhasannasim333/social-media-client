@@ -78,7 +78,7 @@ const Like = ({ post }: PostPops) => {
             <FaRegHeart className="text-lg me-2" />
           )}
         </div>
-        {totalLikes?.data && totalLikes?.data}
+        <span>{totalLikes?.data && totalLikes?.data}</span>
       </span>
     </div>
   );

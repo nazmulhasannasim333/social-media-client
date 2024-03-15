@@ -6,7 +6,7 @@ import React, { useRef, useState } from "react";
 import { BsCameraVideo, BsEmojiLaughing } from "react-icons/bs";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { FaAd, FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { toast } from "sonner";
 import avatar from "../../../../public/images/avatar.png";
 import { FieldValues, useForm } from "react-hook-form";

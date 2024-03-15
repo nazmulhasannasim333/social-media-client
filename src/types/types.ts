@@ -21,3 +21,13 @@ export type TPost = {
   updatedAt: string;
   __v: number;
 };
+
+export type TComment = {
+  _id: string;
+  commentText: string;
+  postId: TPost;
+  userId: TUser;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
