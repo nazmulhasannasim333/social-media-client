@@ -2,12 +2,10 @@
 import { useAllPostQuery } from "@/redux/features/post/postApi";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import avatar from "../../../public/images/avatar.png";
 import verified from "../../../public/images/verified.png";
 import moment from "moment";
-import Like from "./Like";
-import { FaShare } from "react-icons/fa";
 import { TPost } from "@/types/types";
 
 import Comment from "./Comment";
@@ -148,7 +146,7 @@ const AllPosts = () => {
               </div>
             )}
 
-            <Comment />
+            <Comment post={post} />
           </div>
           <hr className="border-gray-600" />
         </div>

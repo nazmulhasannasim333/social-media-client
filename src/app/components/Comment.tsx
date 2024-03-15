@@ -14,7 +14,7 @@ import { useGetMeQuery } from "@/redux/features/user/userApi";
 import avatar from "../../../public/images/avatar.png";
 import Like from "./Like";
 
-const Comment = () => {
+const Comment = ({ post }) => {
   const { data: getMe } = useGetMeQuery(undefined);
   const [showComment, setShowComment] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -31,6 +31,7 @@ const Comment = () => {
       <div className="flex">
         <div className="w-full ">
           <div className="flex items-center justify-between py-5">
+            <Like post={post} />
             <div className=" text-center py-2 m-2">
               <span
                 onClick={() => setShowComment(!showComment)}
@@ -40,7 +41,6 @@ const Comment = () => {
                 {/* <span>{totalComments}</span> */}
               </span>
             </div>
-            <Like />
             <div className=" text-center py-2 m-2">
               <span className=" flex items-center justify-evenly rounded-full  text-slate-400 hover:text-blue-300 hover:cursor-pointer">
                 <FaShareAlt className="text-xl me-2" />

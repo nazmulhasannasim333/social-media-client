@@ -77,60 +77,67 @@ const MiddlePost = () => {
       });
     } else {
       const toastId = toast.loading("Creating post...");
-      if (inputImage) {
-        const formData = new FormData();
-        formData.append("image", inputImage);
-        fetch(image_upload_url, {
-          method: "POST",
-          body: formData,
-        })
-          .then((res) => res.json())
-          .then(async (postPhoto) => {
-            if (postPhoto.success) {
-              const postURL = postPhoto.data.display_url;
-              const { tweetText: postText } = data;
-              const postData = {
-                postText,
-                postPhoto: postURL,
-                userId: user.userId,
-              };
-              const res: any = await createPost(postData);
-              if (res?.error) {
-                toast.error(`Something went wrong`, {
-                  id: toastId,
-                  duration: 2000,
-                });
-              } else {
-                toast.success("Your post has been successful!", {
-                  id: toastId,
-                  duration: 2000,
-                });
-                setInputValue("");
-                setShowEmoji(false);
-                setInputImage("");
+      try {
+        if (inputImage) {
+          const formData = new FormData();
+          formData.append("image", inputImage);
+          fetch(image_upload_url, {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then(async (postPhoto) => {
+              if (postPhoto.success) {
+                const postURL = postPhoto.data.display_url;
+                const { tweetText: postText } = data;
+                const postData = {
+                  postText,
+                  postPhoto: postURL,
+                  userId: user.userId,
+                };
+                const res: any = await createPost(postData);
+                if (res?.error) {
+                  toast.error(`Something went wrong`, {
+                    id: toastId,
+                    duration: 2000,
+                  });
+                } else {
+                  toast.success("Your post has been successful!", {
+                    id: toastId,
+                    duration: 2000,
+                  });
+                  setInputValue("");
+                  setShowEmoji(false);
+                  setInputImage("");
+                }
               }
-            }
-          });
-      } else {
-        const { tweetText: postText } = data;
-        const postData = {
-          postText,
-          userId: user.userId,
-        };
-        const res: any = await createPost(postData);
-        if (res?.error) {
-          toast.error(`Something went wrong`, {
-            id: toastId,
-            duration: 2000,
-          });
+            });
         } else {
-          toast.success("Your post has been successful!", {
-            id: toastId,
-            duration: 2000,
-          });
-          setInputValue("");
-          setShowEmoji(false);
+          const { tweetText: postText } = data;
+          const postData = {
+            postText,
+            userId: user.userId,
+          };
+          const res: any = await createPost(postData);
+          if (res?.error) {
+            toast.error(`Something went wrong`, {
+              id: toastId,
+              duration: 2000,
+            });
+          } else {
+            toast.success("Your post has been successful!", {
+              id: toastId,
+              duration: 2000,
+            });
+            setInputValue("");
+            setShowEmoji(false);
+          }
         }
+      } catch (error) {
+        toast.error("Something went wrong", {
+          id: toastId,
+          duration: 2000,
+        });
       }
     }
   };
