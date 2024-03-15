@@ -16,13 +16,14 @@ import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 const AllPosts = () => {
   const user = useAppSelector(selectCurrentUser);
   const { data: posts, isFetching } = useAllPostQuery(undefined);
-  const [toggleEdit, setToggleEdit] = useState(false);
+  const [editModes, setEditModes] = useState<{ [postId: string]: boolean }>({});
 
   // handle "Edit" button click
-  const handleEditClick = (post: TPost) => {
-    if (post?.userId?._id === user?.userId) {
-      setToggleEdit(!toggleEdit);
-    }
+  const handleEditClick = (postId: string) => {
+    setEditModes((prevEditModes) => ({
+      ...prevEditModes,
+      [postId]: !prevEditModes[postId], // Toggle the edit mode for this post
+    }));
   };
 
   // Loading Skeleton
@@ -87,7 +88,7 @@ const AllPosts = () => {
 
   return (
     <>
-      {posts?.data?.map((post: TPost, index: number) => (
+      {posts?.data?.map((post: TPost) => (
         <div key={post._id} className="">
           <div className=" flex items-center justify-between p-4 pb-0 relative">
             <div className="flex items-center">
@@ -127,12 +128,16 @@ const AllPosts = () => {
               </div>
             </div>
             <div
-              onClick={() => handleEditClick(post)}
+              onClick={() => handleEditClick(post._id)}
               className="font-semibold text-xl hover:cursor-pointer hover:text-blue-400"
             >
               ...
             </div>
-            {toggleEdit && <EditPost post={post} />}
+            <EditPost
+              editModes={editModes[post._id] || false}
+              setEditModes={(postId) => handleEditClick(postId)}
+              post={post}
+            />
           </div>
           <div className="pl-16 pr-2">
             <p

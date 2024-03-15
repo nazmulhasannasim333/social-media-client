@@ -1,57 +1,42 @@
+import { useUpdatePostMutation } from "@/redux/features/post/postApi";
 import { TPost } from "@/types/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import Swal from "sweetalert2";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-type PostModalProps = {
+interface PostModalProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   post: TPost;
-};
-type FormData = {
-  tweetText: string;
-  photo: string;
-};
+  setEditModes: (postId: string) => void;
+}
 
 const PostModal: React.FC<PostModalProps> = ({ isOpen, setIsOpen, post }) => {
   const [inputValue, setInputValue] = useState("");
   const closeModal = () => {
     setIsOpen(false);
   };
+  const [updatePost] = useUpdatePostMutation();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<FormData>();
+  const { register, handleSubmit } = useForm();
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    //     const { tweetText: post_text } = data;
-    //     const status = {
-    //       post_text,
-    //     };
-    //     axios
-    //       .put(
-    //         `https://nh-social-server.vercel.app/update_post/${post._id}`,
-    //         status
-    //       )
-    //       .then((res) => {
-    //         console.log(res.data);
-    //         if (res.data.modifiedCount > 0) {
-    //           refetch();
-    //           setIsOpen(false);
-    //           setEditModes(post._id);
-    //           Swal.fire({
-    //             position: "top-end",
-    //             icon: "success",
-    //             title: "Your post has been Updated",
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //           });
-    //         }
-    //       });
+  const onSubmit = async (data: FieldValues) => {
+    console.log(data);
+    const postData = {
+      postText: data.tweetText,
+      postId: post._id,
+    };
+    const res: any = await updatePost(postData);
+    if (res?.error) {
+      toast.error(`Something went wrong`, {
+        duration: 2000,
+      });
+    } else {
+      toast.success("Post deleted successfully!", {
+        duration: 2000,
+      });
+    }
   };
 
   return (
