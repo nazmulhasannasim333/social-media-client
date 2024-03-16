@@ -93,7 +93,7 @@ const AllPosts = () => {
           <div className=" flex items-center justify-between p-4 pb-0 relative">
             <div className="flex items-center">
               <div>
-                <Link href={`/user-profile/${post?._id}`}>
+                <Link href={`/user-profile/${post?.userId?._id}`}>
                   <Image
                     width={100}
                     height={100}

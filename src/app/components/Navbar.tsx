@@ -10,51 +10,55 @@ import {
   FaUserCheck,
 } from "react-icons/fa";
 import NavLink from "./NavLink";
-
-const navLinks = [
-  {
-    path: "/",
-    title: "Home",
-    icon: <FaHome />,
-  },
-  {
-    path: "/explore",
-    title: "Explore",
-    icon: <FaHashtag />,
-  },
-  {
-    path: "/notification",
-    title: "Notification",
-    icon: <FaRegBell />,
-  },
-  {
-    path: "/message",
-    title: "Message",
-    icon: <FaFacebookMessenger />,
-  },
-  {
-    path: "/bookmarks",
-    title: "Bookmarks",
-    icon: <FaRegBookmark />,
-  },
-  {
-    path: "/lists",
-    title: "Lists",
-    icon: <FaClipboardList />,
-  },
-  {
-    path: "/profile",
-    title: "Profile",
-    icon: <FaUserCheck />,
-  },
-  {
-    path: "/more",
-    title: "More",
-    icon: <CgMoreO />,
-  },
-];
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 const Navbar = () => {
+  const user = useAppSelector(selectCurrentUser);
+
+  const navLinks = [
+    {
+      path: "/",
+      title: "Home",
+      icon: <FaHome />,
+    },
+    {
+      path: "/explore",
+      title: "Explore",
+      icon: <FaHashtag />,
+    },
+    {
+      path: "/notification",
+      title: "Notification",
+      icon: <FaRegBell />,
+    },
+    {
+      path: "/message",
+      title: "Message",
+      icon: <FaFacebookMessenger />,
+    },
+    {
+      path: "/bookmarks",
+      title: "Bookmarks",
+      icon: <FaRegBookmark />,
+    },
+    {
+      path: "/lists",
+      title: "Lists",
+      icon: <FaClipboardList />,
+    },
+    {
+      path: `/user-profile/${user?.userId}`,
+      title: "Profile",
+      icon: <FaUserCheck />,
+    },
+    {
+      path: "/more",
+      title: "More",
+      icon: <CgMoreO />,
+    },
+  ];
+
   return (
     <div className=" px-2">
       <div className="text-3xl font-bold mb-5 text-orange-500">

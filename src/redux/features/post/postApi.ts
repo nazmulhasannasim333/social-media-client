@@ -11,6 +11,15 @@ const postApi = baseApi.injectEndpoints({
       },
       providesTags: ["posts"],
     }),
+    allPostByUserId: builder.query({
+      query: (userId) => {
+        return {
+          url: `posts/get-all-posts-userId/${userId}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["posts"],
+    }),
     createPost: builder.mutation({
       query: (postData) => {
         return {
@@ -46,4 +55,5 @@ export const {
   useCreatePostMutation,
   useDeletePostMutation,
   useUpdatePostMutation,
+  useAllPostByUserIdQuery,
 } = postApi;
