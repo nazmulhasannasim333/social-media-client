@@ -7,6 +7,7 @@ const userApi = baseApi.injectEndpoints({
         url: "/users/me",
         method: "GET",
       }),
+      providesTags: ["users"],
     }),
     getUserInfo: builder.query({
       query: (userId) => {
@@ -15,15 +16,18 @@ const userApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["users"],
     }),
     updateUSerProfile: builder.mutation({
-      query: ({ userId, userData }) => {
+      query: ({ userData, userId }) => {
+        console.log({ userData, userId });
         return {
           url: `/users/update-profile/${userId}`,
           method: "PUT",
           body: userData,
         };
       },
+      invalidatesTags: ["users"],
     }),
   }),
 });

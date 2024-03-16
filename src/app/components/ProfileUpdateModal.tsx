@@ -1,45 +1,21 @@
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Fragment, useRef, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { FaRegWindowClose } from "react-icons/fa";
-import Swal from "sweetalert2";
 import avatar from "../../../public/images/avatar.png";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  useGetMeQuery,
+  useUpdateUSerProfileMutation,
+} from "@/redux/features/user/userApi";
+import { toast } from "sonner";
+import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import { useGetMeQuery } from "@/redux/features/user/userApi";
 const image_upload_token = process.env.NEXT_PUBLIC_image_upload_token;
 
 interface ProfileModalProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-}
-
-type FormData = {
-  name: string;
-  email: string;
-  user_name: string;
-  phone: string;
-  gender: string;
-  website: string;
-  address: string;
-  university: string;
-  about: string;
-  photo: string;
-};
-
-interface User {
-  name: string;
-  email: string;
-  photo: string;
-  user_name: string;
-  phone: string;
-  gender: string;
-  website: string;
-  address: string;
-  university: string;
-  about: string;
 }
 
 const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
@@ -48,10 +24,14 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [inputImage, setInputImage] = useState<File | string>("");
-  const user = useAppSelector(selectCurrentUser);
-  const dispatch = useAppDispatch();
   const { data: getMe } = useGetMeQuery(undefined);
-  const router = useRouter();
+  const [updateUserProfile] = useUpdateUSerProfileMutation();
+  const user = useAppSelector(selectCurrentUser);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   // user profile image host in imgbb
   const image_upload_url = `https://api.imgbb.com/1/upload?key=${image_upload_token}`;
@@ -77,82 +57,90 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
     }
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const onSubmit = async (data: FieldValues) => {
+    const toastId = toast.loading("Updating profile...");
     const gender = data.gender;
     const formateGender = gender.toLowerCase();
-    console.log(formateGender);
 
-    // if (inputImage) {
-    //   const formData = new FormData();
-    //   formData.append("image", inputImage);
-    //   fetch(image_upload_url, {
-    //     method: "POST",
-    //     body: formData,
-    //   })
-    //     .then((res) => res.json())
-    //     .then((userPhoto) => {
-    //       if (userPhoto.success) {
-    //         const userPhotoURL = userPhoto.data.display_url;
-    //         const {
-    //           name,
-    //           email,
-    //           user_name,
-    //           phone,
-    //           gender,
-    //           website,
-    //           address,
-    //           university,
-    //           about,
-    //           photo,
-    //         } = data;
-    //         const updatedUser = {
-    //           name,
-    //           email,
-    //           user_name,
-    //           phone,
-    //           gender,
-    //           website,
-    //           address,
-    //           university,
-    //           about,
-    //           photo: userPhotoURL,
-    //         };
-    //         // console.log(user);
-
-    //       }
-    //     });
-    // } else {
-    //   const {
-    //     name,
-    //     email,
-    //     user_name,
-    //     phone,
-    //     gender,
-    //     website,
-    //     address,
-    //     university,
-    //     about,
-    //   } = data;
-    //   const updatedUser = {
-    //     name,
-    //     email,
-    //     user_name,
-    //     phone,
-    //     gender,
-    //     website,
-    //     address,
-    //     university,
-    //     about,
-    //   };
-
-    // }
+    if (inputImage) {
+      const formData = new FormData();
+      formData.append("image", inputImage);
+      fetch(image_upload_url, {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then(async (userPhoto) => {
+          if (userPhoto.success) {
+            const userPhotoURL = userPhoto.data.display_url;
+            const {
+              name,
+              username,
+              phone,
+              website,
+              address,
+              university,
+              about,
+            } = data;
+            const updatedUser = {
+              name,
+              username,
+              contactNo: phone,
+              gender: formateGender,
+              website,
+              address,
+              university,
+              about,
+              profileImg: userPhotoURL,
+            };
+            const res: any = await updateUserProfile({
+              userData: updatedUser,
+              userId: user?.userId,
+            });
+            if (res?.error) {
+              toast.error(`Something went wrong`, {
+                id: toastId,
+                duration: 2000,
+              });
+            } else {
+              toast.success("Your post has been successful!", {
+                id: toastId,
+                duration: 2000,
+              });
+              setIsOpen(false);
+            }
+          }
+        });
+    } else {
+      const { name, username, phone, website, address, university, about } =
+        data;
+      const updatedUser = {
+        name,
+        username,
+        contactNo: phone,
+        gender: formateGender,
+        website,
+        address,
+        university,
+        about,
+      };
+      const res: any = await updateUserProfile({
+        userData: updatedUser,
+        userId: user?.userId,
+      });
+      if (res?.error) {
+        toast.error(`Something went wrong`, {
+          id: toastId,
+          duration: 2000,
+        });
+      } else {
+        toast.success("Your profile updated successful!", {
+          id: toastId,
+          duration: 2000,
+        });
+        setIsOpen(false);
+      }
+    }
   };
 
   return (
@@ -230,7 +218,6 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
                           type="text"
                           placeholder="Your Name"
                           defaultValue={getMe?.data?.name && getMe?.data?.name}
-                          required
                         />
                       </div>
                       <div className="lg:w-1/2 px-2 pt-2 mt-2">
@@ -245,7 +232,6 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
                           defaultValue={
                             getMe?.data?.email && getMe?.data?.email
                           }
-                          required
                           readOnly
                         />
                       </div>
@@ -263,7 +249,6 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
                           defaultValue={
                             getMe?.data?.username && getMe?.data?.username
                           }
-                          required
                         />
                       </div>
                       <div className="lg:w-1/2 px-2 pt-2 mt-2">
@@ -278,7 +263,6 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
                           defaultValue={
                             getMe?.data?.phone && getMe?.data?.phone
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -293,7 +277,6 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
                           defaultValue={
                             getMe?.data?.gender && getMe?.data?.gender
                           }
-                          required
                         >
                           <option className="bg-slate-600" value="Male">
                             Male
@@ -318,7 +301,6 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
                           defaultValue={
                             getMe?.data?.website && getMe?.data?.website
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -335,7 +317,6 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
                           defaultValue={
                             getMe?.data?.address && getMe?.data?.address
                           }
-                          required
                         />
                       </div>
                       <div className="lg:w-1/2 px-2 pt-2 mt-2">
@@ -350,7 +331,6 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
                           defaultValue={
                             getMe?.data?.university && getMe?.data?.university
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -365,7 +345,6 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
                         cols={50}
                         placeholder="About Yourself"
                         defaultValue={getMe?.data?.about && getMe?.data?.about}
-                        required
                       />
                     </div>
                     <div className="flex">
