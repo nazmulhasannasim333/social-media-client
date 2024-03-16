@@ -22,6 +22,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import MobileMenu from "@/app/components/MobileDeviceMenu/page";
 import ProfilePosts from "@/app/components/ProfilePosts";
+import ProfileUpdateModal from "@/app/components/ProfileUpdateModal";
 
 const UserProfile = ({ params }: any) => {
   const user = useAppSelector(selectCurrentUser);
@@ -101,148 +102,150 @@ const UserProfile = ({ params }: any) => {
               </div>
             </div>
             {/* Follow Button */}
-            <div className="flex flex-col text-right">
-              {user?.userId === userInfo?.data?._id ? (
-                <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                  Edit Profile
-                </button>
-              ) : (
+            {user?.userId === userInfo?.data?._id ? (
+              <div className="flex flex-col text-right">
                 <button
                   onClick={() => setIsOpen(!isOpen)}
                   className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto"
                 >
+                  Edit Profile
+                </button>
+                <ProfileUpdateModal isOpen={isOpen} setIsOpen={setIsOpen} />
+              </div>
+            ) : (
+              <div className="flex flex-col text-right">
+                <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
                   Follow
                 </button>
+              </div>
+            )}
+          </div>
+        </div>
+        {/* Profile info */}
+        <div className="space-y-1 justify-center w-full mt-3 ml-3">
+          {/* User basic*/}
+          <div>
+            <div className="flex items-center gap-x-1">
+              <h2 className="text-xl leading-6 font-bold text-white">
+                {userInfo && userInfo?.data?.name}
+              </h2>
+              {userInfo?.data?.profileImg && userInfo?.data?.profileImg && (
+                <Image
+                  width={100}
+                  height={100}
+                  className="h-4 w-4 rounded-full"
+                  src={verified}
+                  alt="verified"
+                  title="NH Social confirmed this profile is authentic"
+                />
               )}
-              {/* <ProfileUpdateModal isOpen={isOpen} setIsOpen={setIsOpen} /> */}
+            </div>
+            <p className="text-sm leading-5 font-medium text-slate-500">
+              @{userInfo && userInfo?.data?.username}
+            </p>
+          </div>
+          {/* Description and others */}
+          <div className="pt-3">
+            <p className="text-white leading-tight mb-2 text-xl">
+              {userInfo?.data?.about ? (
+                userInfo?.data?.about
+              ) : (
+                <span>Not Added</span>
+              )}
+            </p>
+
+            <div className="text-gray-600">
+              <span className="flex mr-2 mt-2 ">
+                <FaBookReader />
+                <span className="leading-5 ml-2 text-slate-300">
+                  {userInfo?.data?.university ? (
+                    userInfo?.data?.university
+                  ) : (
+                    <span className="text-gray-500">Not Added</span>
+                  )}
+                </span>
+              </span>
+              <span className="flex mr-2 mt-2 ">
+                <FaMapMarkerAlt />
+                <span className="leading-5 ml-2 text-slate-300">
+                  {userInfo?.data?.address ? (
+                    userInfo?.data?.address
+                  ) : (
+                    <span className="text-gray-500">Not Added</span>
+                  )}
+                </span>
+              </span>
+              <span className="flex mr-2 mt-2 ">
+                <FaUserMd />
+                <span className="leading-5 ml-2 text-slate-300">
+                  {userInfo?.data?.gender ? (
+                    userInfo?.data?.gender
+                  ) : (
+                    <span className="text-gray-500">Not Added</span>
+                  )}
+                </span>
+              </span>
+              <span className="flex mr-2 mt-2 ">
+                <FaMailBulk />
+                <span className="leading-5 ml-2 text-slate-300">
+                  {userInfo && userInfo?.data?.email}
+                </span>
+              </span>
+              <span className="flex mr-2 mt-2 ">
+                <FaPhoneAlt />
+                <span className="leading-5 ml-2 text-slate-300">
+                  {userInfo?.data?.contactNo ? (
+                    userInfo?.data?.contactNo
+                  ) : (
+                    <span className="text-gray-500">Not Added</span>
+                  )}
+                </span>
+              </span>
+              <span className="flex mr-2 mt-2">
+                <FaLink />
+                <span className="leading-5 ml-2 text-blue-400">
+                  <a
+                    href={
+                      userInfo?.data?.website ? userInfo?.data?.website : ""
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {userInfo?.data?.website ? (
+                      userInfo?.data?.website
+                    ) : (
+                      <span className="text-gray-500">Not Added</span>
+                    )}
+                  </a>
+                </span>
+              </span>
+              <span className="flex mr-2 mt-2 ">
+                <FaCalendarAlt />
+                <span className="leading-5 ml-2 text-slate-300">
+                  Joined{" "}
+                  {moment(
+                    userInfo?.data?.createdAt && userInfo?.data?.createdAt
+                  ).format("MMMM Do, YYYY")}
+                </span>
+              </span>
             </div>
           </div>
-          {/* Profile info */}
-          <div className="space-y-1 justify-center w-full mt-3 ml-3">
-            {/* User basic*/}
-            <div>
-              <div className="flex items-center gap-x-1">
-                <h2 className="text-xl leading-6 font-bold text-white">
-                  {userInfo && userInfo?.data?.name}
-                </h2>
-                {userInfo?.data?.profileImg && userInfo?.data?.profileImg && (
-                  <Image
-                    width={100}
-                    height={100}
-                    className="h-4 w-4 rounded-full"
-                    src={verified}
-                    alt="verified"
-                    title="NH Social confirmed this profile is authentic"
-                  />
-                )}
-              </div>
-              <p className="text-sm leading-5 font-medium text-slate-500">
-                @{userInfo && userInfo?.data?.username}
-              </p>
+          {/* TODO: Follower and Following functionality will be implement */}
+          <div className="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
+            <div className="text-center pr-3">
+              <span className="font-bold text-white">520</span>
+              <span className="text-gray-600"> Following</span>
             </div>
-            {/* Description and others */}
-            <div className="pt-3">
-              <p className="text-white leading-tight mb-2 text-xl">
-                {userInfo?.data?.about ? (
-                  userInfo?.data?.about
-                ) : (
-                  <span>Not Added</span>
-                )}
-              </p>
-
-              <div className="text-gray-600">
-                <span className="flex mr-2 mt-2 ">
-                  <FaBookReader />
-                  <span className="leading-5 ml-2 text-slate-300">
-                    {userInfo?.data?.university ? (
-                      userInfo?.data?.university
-                    ) : (
-                      <span className="text-gray-500">Not Added</span>
-                    )}
-                  </span>
-                </span>
-                <span className="flex mr-2 mt-2 ">
-                  <FaMapMarkerAlt />
-                  <span className="leading-5 ml-2 text-slate-300">
-                    {userInfo?.data?.address ? (
-                      userInfo?.data?.address
-                    ) : (
-                      <span className="text-gray-500">Not Added</span>
-                    )}
-                  </span>
-                </span>
-                <span className="flex mr-2 mt-2 ">
-                  <FaUserMd />
-                  <span className="leading-5 ml-2 text-slate-300">
-                    {userInfo?.data?.gender ? (
-                      userInfo?.data?.gender
-                    ) : (
-                      <span className="text-gray-500">Not Added</span>
-                    )}
-                  </span>
-                </span>
-                <span className="flex mr-2 mt-2 ">
-                  <FaMailBulk />
-                  <span className="leading-5 ml-2 text-slate-300">
-                    {userInfo && userInfo?.data?.email}
-                  </span>
-                </span>
-                <span className="flex mr-2 mt-2 ">
-                  <FaPhoneAlt />
-                  <span className="leading-5 ml-2 text-slate-300">
-                    {userInfo?.data?.contactNo ? (
-                      userInfo?.data?.phone
-                    ) : (
-                      <span className="text-gray-500">Not Added</span>
-                    )}
-                  </span>
-                </span>
-                <span className="flex mr-2 mt-2">
-                  <FaLink />
-                  <span className="leading-5 ml-2 text-blue-400">
-                    <a
-                      href={
-                        userInfo?.data?.website ? userInfo?.data?.website : ""
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {userInfo?.data?.website ? (
-                        userInfo?.data?.website
-                      ) : (
-                        <span className="text-gray-500">Not Added</span>
-                      )}
-                    </a>
-                  </span>
-                </span>
-                <span className="flex mr-2 mt-2 ">
-                  <FaCalendarAlt />
-                  <span className="leading-5 ml-2 text-slate-300">
-                    Joined{" "}
-                    {moment(
-                      userInfo?.data?.createdAt && userInfo?.data?.createdAt
-                    ).format("MMMM Do, YYYY")}
-                  </span>
-                </span>
-              </div>
-            </div>
-            {/* TODO: Follower and Following functionality will be implement */}
-            <div className="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
-              <div className="text-center pr-3">
-                <span className="font-bold text-white">520</span>
-                <span className="text-gray-600"> Following</span>
-              </div>
-              <div className="text-center px-3">
-                <span className="font-bold text-white">2.4m </span>
-                <span className="text-gray-600"> Followers</span>
-              </div>
+            <div className="text-center px-3">
+              <span className="font-bold text-white">2.4m </span>
+              <span className="text-gray-600"> Followers</span>
             </div>
           </div>
         </div>
-        <hr className="border-blue-600 border-1" />
-        <ProfilePosts params={params} />
-        <MobileMenu />
       </div>
+      <hr className="border-blue-600 border-1" />
+      <ProfilePosts params={params} />
+      <MobileMenu />
     </div>
   );
 };
