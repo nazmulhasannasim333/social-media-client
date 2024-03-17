@@ -1,12 +1,76 @@
+"use client";
+
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useGetAllUserQuery } from "@/redux/features/user/userApi";
+import { useAppSelector } from "@/redux/hooks";
+import { TUser } from "@/types/types";
 import Image from "next/image";
 
 const RightSide = () => {
   const CustomDate: Date = new Date();
+  const user = useAppSelector(selectCurrentUser);
+  const { data: allUsers } = useGetAllUserQuery(undefined);
+  const users = allUsers?.data;
+  const filteredUsers = users?.filter(
+    (getUser: { _id: string }) => getUser._id !== user?.userId
+  );
+  const shuffledUsers = filteredUsers?.slice()?.sort(() => Math.random() - 0.5);
+  const randomUsers = shuffledUsers?.slice(0, 3);
+  console.log(randomUsers);
 
   return (
-    <div className="lg:col-span-2 h-screen sticky top-0 lg:block hidden">
+    <div className="lg:col-span-2 h-screen overflow-y-auto sticky top-0 block">
       {/*right menu*/}
-
+      <div className="max-w-6xl rounded-lg bg-gray-700 overflow-hidden shadow-lg ms-4 my-4">
+        <div className="flex">
+          <div className="flex-1 m-2">
+            <h2 className="px-4 py-2 text-xl w-48 font-semibold text-white">
+              Who to follow
+            </h2>
+          </div>
+        </div>
+        <hr className="border-gray-600" />
+        {/*second person who to follow*/}
+        {randomUsers?.map((rUser: TUser) => (
+          <div key={rUser._id}>
+            <div className="flex items-center py-4">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 ml-2">
+                  <Image
+                    height={50}
+                    width={50}
+                    src="https://images.pexels.com/photos/428328/pexels-photo-428328.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                    alt=""
+                    className="w-full h-full rounded-full"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col mx-2">
+                <p className="text-[18px] font-semibold text-white">
+                  {rUser?.name}
+                </p>
+                <p className="text-[14px] text-gray-400">{rUser?.username}</p>
+              </div>
+              <div className="flex-grow"></div>
+              <div className="mx-2">
+                <button className="bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-3 border border-white hover:border-transparent rounded-full">
+                  Follow
+                </button>
+              </div>
+            </div>
+            <hr className="border-gray-600" />
+          </div>
+        ))}
+        <hr className="border-gray-600" />
+        {/*show more*/}
+        <div className="flex">
+          <div className="flex-1 p-4">
+            <h2 className="px-4 ml-2 w-48 font-bold text-blue-400">
+              Show more
+            </h2>
+          </div>
+        </div>
+      </div>
       {/*second-trending tweet section*/}
       <div className="max-w-sm rounded-lg bg-gray-700 overflow-hidden shadow-lg my-4 ms-4">
         <div className="flex">
@@ -156,89 +220,7 @@ const RightSide = () => {
           </div>
         </div>
       </div>
-      {/*third-people suggetion to follow section*/}
-      <div className="max-w-sm rounded-lg bg-gray-700 overflow-hidden shadow-lg ms-4">
-        <div className="flex">
-          <div className="flex-1 m-2">
-            <h2 className="px-4 py-2 text-xl w-48 font-semibold text-white">
-              Who to follow
-            </h2>
-          </div>
-        </div>
-        <hr className="border-gray-600" />
-        {/*first person who to follow*/}
-        <div className="flex flex-shrink-0">
-          <div className="flex-1 ">
-            <div className="flex items-center w-48">
-              <div>
-                <Image
-                  width={1000}
-                  height={1000}
-                  className="inline-block w-10 h-10 rounded-full ml-4 mt-2"
-                  src="https://images.pexels.com/photos/428328/pexels-photo-428328.jpeg?auto=compress&cs=tinysrgb&w=1600"
-                  alt=""
-                />
-              </div>
-              <div className="ml-3 mt-3">
-                <p className="text-base leading-6 font-medium text-white">
-                  Nahid Khan
-                </p>
-                <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                  @Nahid123
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex-1 px-4 py-2 m-2">
-            <span className=" float-right">
-              <button className="bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded-full">
-                Follow
-              </button>
-            </span>
-          </div>
-        </div>
-        <hr className="border-gray-600" />
-        {/*second person who to follow*/}
-        <div className="flex flex-shrink-0">
-          <div className="flex-1 ">
-            <div className="flex items-center w-48">
-              <div>
-                <Image
-                  width={1000}
-                  height={1000}
-                  className="inline-block w-10 h-10 rounded-full ml-4 mt-2"
-                  src="https://images.pexels.com/photos/1680172/pexels-photo-1680172.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  alt=""
-                />
-              </div>
-              <div className="ml-3 mt-3">
-                <p className="text-base leading-6 font-medium text-white">
-                  Md Arman
-                </p>
-                <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                  @arman321
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex-1 px-4 py-2 m-2">
-            <span className=" float-right">
-              <button className="bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded-full">
-                Follow
-              </button>
-            </span>
-          </div>
-        </div>
-        <hr className="border-gray-600" />
-        {/*show more*/}
-        <div className="flex">
-          <div className="flex-1 p-4">
-            <h2 className="px-4 ml-2 w-48 font-bold text-blue-400">
-              Show more
-            </h2>
-          </div>
-        </div>
-      </div>
+
       <div className="ms-6 my-6">
         <div className="flex-1">
           <span>
@@ -254,6 +236,11 @@ const RightSide = () => {
           </p>
         </div>
       </div>
+      <style>{`
+        .overflow-y-auto::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 };

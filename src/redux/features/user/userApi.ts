@@ -9,6 +9,15 @@ const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["users"],
     }),
+    getAllUser: builder.query({
+      query: () => {
+        return {
+          url: `/users/get-all-user`,
+          method: "GET",
+        };
+      },
+      providesTags: ["users"],
+    }),
     getUserInfo: builder.query({
       query: (userId) => {
         return {
@@ -36,4 +45,5 @@ export const {
   useGetMeQuery,
   useGetUserInfoQuery,
   useUpdateUSerProfileMutation,
+  useGetAllUserQuery,
 } = userApi;
