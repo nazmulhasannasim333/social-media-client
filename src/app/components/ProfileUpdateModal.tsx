@@ -97,6 +97,7 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
               userData: updatedUser,
               userId: user?.userId,
             });
+            // console.log(res);
             if (res?.error) {
               toast.error(`Something went wrong`, {
                 id: toastId,
@@ -124,12 +125,14 @@ const ProfileUpdateModal: React.FC<ProfileModalProps> = ({
         university,
         about,
       };
+      console.log(updatedUser);
       const res: any = await updateUserProfile({
         userData: updatedUser,
         userId: user?.userId,
       });
+      console.log(res);
       if (res?.error) {
-        toast.error(`Something went wrong`, {
+        toast.error(`${res.error?.data?.message}`, {
           id: toastId,
           duration: 2000,
         });

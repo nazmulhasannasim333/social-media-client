@@ -35,7 +35,7 @@ const Comment = ({ post }: PostPops) => {
   const [showComment, setShowComment] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
 
   // add emoji in comment box
   const addEmoji = (e: { native: string }) => {
@@ -44,7 +44,7 @@ const Comment = ({ post }: PostPops) => {
   };
 
   //   create comment
-  const onSubmit = async (data: FieldValues) => {
+  const onSubmit = async () => {
     if (!user) {
       Swal.fire({
         title: "Please Login first then comment in this post",
@@ -60,12 +60,13 @@ const Comment = ({ post }: PostPops) => {
       });
     } else {
       const commentData = {
-        commentText: data.commentText,
+        commentText: inputValue,
         postId: post._id,
         userId: user?.userId,
       };
       await createComment(commentData);
       setInputValue("");
+      setShowEmoji(false);
     }
   };
 
@@ -117,7 +118,6 @@ const Comment = ({ post }: PostPops) => {
                 </div>
                 <div className="flex-1 pt-2 mb-2">
                   <textarea
-                    {...register("commentText")}
                     onFocus={() => setShowEmoji(false)}
                     rows={2}
                     cols={20}

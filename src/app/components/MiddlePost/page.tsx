@@ -40,7 +40,7 @@ const MiddlePost = () => {
   // post a image
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImage = event.target.files && event.target.files[0];
-    // console.log(selectedImage);
+
     if (selectedImage) {
       setInputImage(selectedImage);
     }
@@ -60,7 +60,7 @@ const MiddlePost = () => {
   };
 
   // post in social media
-  const onSubmit = async (data: FieldValues) => {
+  const onSubmit = async () => {
     if (!user) {
       Swal.fire({
         title: "Please Login first then post something",
@@ -88,9 +88,8 @@ const MiddlePost = () => {
             .then(async (postPhoto) => {
               if (postPhoto.success) {
                 const postURL = postPhoto.data.display_url;
-                const { tweetText: postText } = data;
                 const postData = {
-                  postText,
+                  postText: inputValue,
                   postPhoto: postURL,
                   userId: user.userId,
                 };
@@ -112,9 +111,8 @@ const MiddlePost = () => {
               }
             });
         } else {
-          const { tweetText: postText } = data;
           const postData = {
-            postText,
+            postText: inputValue,
             userId: user.userId,
           };
           const res: any = await createPost(postData);
@@ -184,7 +182,6 @@ const MiddlePost = () => {
           </div>
           <div className="flex-1 px-2 pt-2 mt-2">
             <textarea
-              {...register("tweetText")}
               onFocus={() => setShowEmoji(false)}
               className=" bg-transparent text-gray-400 font-medium text-lg w-full outline-none"
               rows={4}

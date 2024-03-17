@@ -24,9 +24,6 @@ const AllPosts = ({
   posts: TAllPostsProps;
   isFetching: boolean;
 }) => {
-  const user = useAppSelector(selectCurrentUser);
-  // const { data: posts, isFetching } = useAllPostQuery(undefined);
-  console.log(posts);
   const [editModes, setEditModes] = useState<{ [postId: string]: boolean }>({});
 
   // handle "Edit" button click
