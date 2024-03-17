@@ -27,7 +27,7 @@ const MiddlePost = () => {
   const user = useAppSelector(selectCurrentUser);
   const { data: getMe } = useGetMeQuery(undefined);
   const [createPost] = useCreatePostMutation();
-  const { register, handleSubmit } = useForm();
+  const { handleSubmit } = useForm();
   const [showEmoji, setShowEmoji] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");

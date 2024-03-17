@@ -5,15 +5,21 @@ import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TUser } from "@/types/types";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import avatar from "../../../../public/images/avatar.png";
+import {
+  useCheckFollowQuery,
+  useCreateFollowMutation,
+} from "@/redux/features/follow/followApi";
+import FollowButton from "../FollowButton";
 
 const RightSide = () => {
   const CustomDate: Date = new Date();
   const user = useAppSelector(selectCurrentUser);
   const { data: allUsers } = useGetAllUserQuery(undefined);
-  const users = allUsers?.data;
+
   const [showAllUsers, setShowAllUsers] = useState(false);
+  const users = allUsers?.data;
 
   // Toggle function to show more or show less users
   const toggleShowAllUsers = () => {
@@ -70,9 +76,7 @@ const RightSide = () => {
                 </div>
                 <div className="flex-grow"></div>
                 <div className="mx-2">
-                  <button className="bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-3 border border-white hover:border-transparent rounded-full">
-                    Follow
-                  </button>
+                  <FollowButton rUser={rUser} />
                 </div>
               </div>
               <hr className="border-gray-600" />

@@ -35,7 +35,7 @@ const Comment = ({ post }: PostPops) => {
   const [showComment, setShowComment] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { handleSubmit } = useForm();
 
   // add emoji in comment box
   const addEmoji = (e: { native: string }) => {
@@ -74,7 +74,7 @@ const Comment = ({ post }: PostPops) => {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      onSubmit({ commentText: inputValue });
+      onSubmit();
     }
   };
 
