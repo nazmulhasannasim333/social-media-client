@@ -3,10 +3,15 @@ import { baseApi } from "../../api/baseApi";
 const postApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     allPost: builder.query({
-      query: () => {
+      query: (searchTerm) => {
+        const params = new URLSearchParams();
+        if (searchTerm) {
+          params.append("searchTerm", searchTerm);
+        }
         return {
           url: "posts/get-all-posts",
           method: "GET",
+          params: params,
         };
       },
       providesTags: ["posts"],

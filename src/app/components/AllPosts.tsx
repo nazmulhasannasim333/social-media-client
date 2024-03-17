@@ -13,9 +13,20 @@ import EditPost from "./EditPost";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
-const AllPosts = () => {
+type TAllPostsProps = {
+  data: TPost[];
+};
+
+const AllPosts = ({
+  posts,
+  isFetching,
+}: {
+  posts: TAllPostsProps;
+  isFetching: boolean;
+}) => {
   const user = useAppSelector(selectCurrentUser);
-  const { data: posts, isFetching } = useAllPostQuery(undefined);
+  // const { data: posts, isFetching } = useAllPostQuery(undefined);
+  console.log(posts);
   const [editModes, setEditModes] = useState<{ [postId: string]: boolean }>({});
 
   // handle "Edit" button click

@@ -17,26 +17,25 @@ import Swal from "sweetalert2";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
-import { useCreatePostMutation } from "@/redux/features/post/postApi";
+import {
+  useAllPostQuery,
+  useCreatePostMutation,
+} from "@/redux/features/post/postApi";
 const image_upload_token = process.env.NEXT_PUBLIC_image_upload_token;
 
 const MiddlePost = () => {
   const user = useAppSelector(selectCurrentUser);
   const { data: getMe } = useGetMeQuery(undefined);
   const [createPost] = useCreatePostMutation();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const [showEmoji, setShowEmoji] = useState(false);
-  const [searchText, setSearchText] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [inputImage, setInputImage] = useState<File | string>("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
+  const { data: posts, isFetching } = useAllPostQuery(searchTerm);
   const image_upload_url = `https://api.imgbb.com/1/upload?key=${image_upload_token}`;
-
-  // search post
-  const handleSearchText = () => {
-    console.log("search");
-  };
 
   // post a image
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -162,7 +161,7 @@ const MiddlePost = () => {
             <FaSearch />
           </button>
           <input
-            onChange={handleSearchText}
+            onChange={(e) => setSearchTerm(e.target.value)}
             type="search"
             name="search"
             placeholder="Search NH Social"
@@ -277,7 +276,7 @@ const MiddlePost = () => {
       </form>
       <hr className="border-blue-800 border-2" />
       {/* Get All Posts */}
-      <AllPosts />
+      <AllPosts posts={posts} isFetching={isFetching} />
       {/* mobile menu */}
       <MobileMenu />
     </div>

@@ -5,18 +5,31 @@ import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TUser } from "@/types/types";
 import Image from "next/image";
+import { useState } from "react";
+import avatar from "../../../../public/images/avatar.png";
 
 const RightSide = () => {
   const CustomDate: Date = new Date();
   const user = useAppSelector(selectCurrentUser);
   const { data: allUsers } = useGetAllUserQuery(undefined);
   const users = allUsers?.data;
+  const [showAllUsers, setShowAllUsers] = useState(false);
+
+  // Toggle function to show more or show less users
+  const toggleShowAllUsers = () => {
+    setShowAllUsers(!showAllUsers);
+  };
+
+  // filter by current user
   const filteredUsers = users?.filter(
     (getUser: { _id: string }) => getUser._id !== user?.userId
   );
-  const shuffledUsers = filteredUsers?.slice()?.sort(() => Math.random() - 0.5);
-  const randomUsers = shuffledUsers?.slice(0, 3);
-  console.log(randomUsers);
+  const shuffledUsers = filteredUsers?.sort(() => Math.random() - 0.5);
+  const displayedUsers = showAllUsers
+    ? shuffledUsers?.length > 6
+      ? shuffledUsers?.slice(0, 6)
+      : shuffledUsers
+    : shuffledUsers?.slice(0, 3);
 
   return (
     <div className="lg:col-span-2 h-screen overflow-y-auto sticky top-0 block">
@@ -30,43 +43,52 @@ const RightSide = () => {
           </div>
         </div>
         <hr className="border-gray-600" />
-        {/*second person who to follow*/}
-        {randomUsers?.map((rUser: TUser) => (
-          <div key={rUser._id}>
-            <div className="flex items-center py-4">
-              <div className="flex-shrink-0">
-                <div className="w-10 h-10 ml-2">
-                  <Image
-                    height={50}
-                    width={50}
-                    src="https://images.pexels.com/photos/428328/pexels-photo-428328.jpeg?auto=compress&cs=tinysrgb&w=1600"
-                    alt=""
-                    className="w-full h-full rounded-full"
-                  />
+        <div
+          className={`transition-all duration-1000 ease-in-out max-h-${
+            showAllUsers ? "full" : "36"
+          } overflow-hidden`}
+        >
+          {displayedUsers?.map((rUser: TUser) => (
+            <div key={rUser._id}>
+              <div className="flex items-center py-4">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 ml-2">
+                    <Image
+                      height={50}
+                      width={50}
+                      src={rUser.profileImg ? rUser.profileImg : avatar}
+                      alt=""
+                      className="w-full h-full rounded-full"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col mx-2">
+                  <p className="text-[17px] font-semibold text-white">
+                    {rUser?.name}
+                  </p>
+                  <p className="text-[14px] text-gray-400">{rUser?.username}</p>
+                </div>
+                <div className="flex-grow"></div>
+                <div className="mx-2">
+                  <button className="bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-3 border border-white hover:border-transparent rounded-full">
+                    Follow
+                  </button>
                 </div>
               </div>
-              <div className="flex flex-col mx-2">
-                <p className="text-[18px] font-semibold text-white">
-                  {rUser?.name}
-                </p>
-                <p className="text-[14px] text-gray-400">{rUser?.username}</p>
-              </div>
-              <div className="flex-grow"></div>
-              <div className="mx-2">
-                <button className="bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-3 border border-white hover:border-transparent rounded-full">
-                  Follow
-                </button>
-              </div>
+              <hr className="border-gray-600" />
             </div>
-            <hr className="border-gray-600" />
-          </div>
-        ))}
+          ))}
+        </div>
+
         <hr className="border-gray-600" />
         {/*show more*/}
         <div className="flex">
-          <div className="flex-1 p-4">
-            <h2 className="px-4 ml-2 w-48 font-bold text-blue-400">
-              Show more
+          <div className="flex-1 p-4 ">
+            <h2
+              onClick={toggleShowAllUsers}
+              className="px-4 ml-2 w-48 font-bold text-blue-400 cursor-pointer"
+            >
+              {showAllUsers ? "Show less" : "Show more"}
             </h2>
           </div>
         </div>
