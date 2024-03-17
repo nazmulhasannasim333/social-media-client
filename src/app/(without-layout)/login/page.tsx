@@ -26,7 +26,6 @@ const LoginPage = () => {
         password: data.password,
       };
       const res = await login(userInfo).unwrap();
-      console.log(res);
       if (res?.error) {
         toast.error(`Something went wrong`, {
           id: toastId,

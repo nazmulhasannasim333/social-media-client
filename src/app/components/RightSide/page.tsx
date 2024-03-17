@@ -5,12 +5,8 @@ import { useGetAllUserQuery } from "@/redux/features/user/userApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TUser } from "@/types/types";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import avatar from "../../../../public/images/avatar.png";
-import {
-  useCheckFollowQuery,
-  useCreateFollowMutation,
-} from "@/redux/features/follow/followApi";
 import FollowButton from "../FollowButton";
 
 const RightSide = () => {

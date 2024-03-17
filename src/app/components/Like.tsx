@@ -37,7 +37,7 @@ const Like = ({ post }: PostPops) => {
   const handleLikeButton = async (postId: string) => {
     if (!user) {
       Swal.fire({
-        title: "Please Login first then post something",
+        title: "Please Login first then like",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

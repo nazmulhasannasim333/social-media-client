@@ -26,6 +26,15 @@ const followApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["follow"],
     }),
+    removeFollow: builder.mutation({
+      query: (followData) => {
+        return {
+          url: `follows/remove-follow/${followData.followingUserId}/${followData.followerUserId}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["follow"],
+    }),
     checkFollow: builder.query({
       query: (followingUserId: string) => {
         return {
@@ -38,4 +47,8 @@ const followApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCreateFollowMutation, useCheckFollowQuery } = followApi;
+export const {
+  useCreateFollowMutation,
+  useCheckFollowQuery,
+  useRemoveFollowMutation,
+} = followApi;
