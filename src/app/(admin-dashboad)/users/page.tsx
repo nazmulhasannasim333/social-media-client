@@ -1,11 +1,11 @@
 import AdminUserPage from "@/app/components/Dashboard/Users/page";
-import React from "react";
+import ProtectedRoute from "@/app/components/ProtectedRoute";
 
 const AdminUserDashboard = () => {
   return (
-    <div>
+    <ProtectedRoute>
       <AdminUserPage />
-    </div>
+    </ProtectedRoute>
   );
 };
 

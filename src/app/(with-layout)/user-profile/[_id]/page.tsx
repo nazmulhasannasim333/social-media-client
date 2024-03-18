@@ -132,7 +132,7 @@ const UserProfile = ({ params }: any) => {
               <h2 className="text-xl leading-6 font-bold text-white">
                 {userInfo && userInfo?.data?.name}
               </h2>
-              {userInfo?.data?.profileImg && userInfo?.data?.profileImg && (
+              {userInfo?.data?.isVerified && (
                 <Image
                   width={100}
                   height={100}

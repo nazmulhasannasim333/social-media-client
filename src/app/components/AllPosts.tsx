@@ -10,8 +10,7 @@ import { TPost } from "@/types/types";
 
 import Comment from "./Comment";
 import EditPost from "./EditPost";
-import { useAppSelector } from "@/redux/hooks";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import Skeleton from "./Skeleton";
 
 type TAllPostsProps = {
   data: TPost[];
@@ -20,9 +19,11 @@ type TAllPostsProps = {
 const AllPosts = ({
   posts,
   isFetching,
+  isLoading,
 }: {
   posts: TAllPostsProps;
   isFetching: boolean;
+  isLoading: boolean;
 }) => {
   const [editModes, setEditModes] = useState<{ [postId: string]: boolean }>({});
 
@@ -34,64 +35,14 @@ const AllPosts = ({
     }));
   };
 
-  // Loading Skeleton
+  // Loading Skeleton for fetching
   if (isFetching) {
-    return (
-      <>
-        <div className="space-y-5 bg-slate-900 px-4 my-8 animate-pulse">
-          <div className="flex justify-start items-center">
-            <div className="h-10 w-10 rounded-full bg-rose-100/10 animate-pulse"></div>
-            <div className="h-3 w-2/6 ms-3 rounded-lg bg-rose-100/10 animate-pulse"></div>
-          </div>
-          <div className="space-y-3">
-            <div className="h-3 w-3/5 rounded-lg bg-rose-100/10 animate-pulse"></div>
-            <div className="h-3 w-4/5 rounded-lg bg-rose-100/20 animate-pulse"></div>
-            <div className="h-3 w-2/5 rounded-lg bg-rose-100/20 animate-pulse"></div>
-          </div>
-          <div className="h-72 rounded-lg bg-rose-100/10 animate-pulse"></div>
-        </div>
-        <hr className="border-gray-600" />
-        <div className="space-y-5 bg-slate-900 px-4 my-8 animate-pulse">
-          <div className="flex justify-start items-center">
-            <div className="h-10 w-10 rounded-full bg-rose-100/10 animate-pulse"></div>
-            <div className="h-3 w-2/6 ms-3 rounded-lg bg-rose-100/10 animate-pulse"></div>
-          </div>
-          <div className="space-y-3">
-            <div className="h-3 w-3/5 rounded-lg bg-rose-100/10 animate-pulse"></div>
-            <div className="h-3 w-4/5 rounded-lg bg-rose-100/20 animate-pulse"></div>
-            <div className="h-3 w-2/5 rounded-lg bg-rose-100/20 animate-pulse"></div>
-          </div>
-          <div className="h-72 rounded-lg bg-rose-100/10 animate-pulse"></div>
-        </div>
-        <hr className="border-gray-600" />
-        <div className="space-y-5 bg-slate-900 px-4 my-8 animate-pulse">
-          <div className="flex justify-start items-center">
-            <div className="h-10 w-10 rounded-full bg-rose-100/10 animate-pulse"></div>
-            <div className="h-3 w-2/6 ms-3 rounded-lg bg-rose-100/10 animate-pulse"></div>
-          </div>
-          <div className="space-y-3">
-            <div className="h-3 w-3/5 rounded-lg bg-rose-100/10 animate-pulse"></div>
-            <div className="h-3 w-4/5 rounded-lg bg-rose-100/20 animate-pulse"></div>
-            <div className="h-3 w-2/5 rounded-lg bg-rose-100/20 animate-pulse"></div>
-          </div>
-          <div className="h-72 rounded-lg bg-rose-100/10 animate-pulse"></div>
-        </div>
-        <hr className="border-gray-600" />
-        <div className="space-y-5 bg-slate-900 px-4 my-8 animate-pulse">
-          <div className="flex justify-start items-center">
-            <div className="h-10 w-10 rounded-full bg-rose-100/10 animate-pulse"></div>
-            <div className="h-3 w-2/6 ms-3 rounded-lg bg-rose-100/10 animate-pulse"></div>
-          </div>
-          <div className="space-y-3">
-            <div className="h-3 w-3/5 rounded-lg bg-rose-100/10 animate-pulse"></div>
-            <div className="h-3 w-4/5 rounded-lg bg-rose-100/20 animate-pulse"></div>
-            <div className="h-3 w-2/5 rounded-lg bg-rose-100/20 animate-pulse"></div>
-          </div>
-          <div className="h-72 rounded-lg bg-rose-100/10 animate-pulse"></div>
-        </div>
-        <hr className="border-gray-600" />
-      </>
-    );
+    return <Skeleton />;
+  }
+
+  // Loading Skeleton for loading
+  if (isLoading) {
+    return <Skeleton />;
   }
 
   return (
@@ -118,7 +69,7 @@ const AllPosts = ({
                       {post?.userId?.name}
                     </Link>
                   </p>
-                  {post?.userId?.profileImg && (
+                  {post?.userId?.isVerified && (
                     <Image
                       width={100}
                       height={100}

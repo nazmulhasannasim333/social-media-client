@@ -7,6 +7,7 @@ export type TUser = {
   profileImg: string;
   status: string;
   isDeleted: boolean;
+  isVerified: boolean;
   createdAt: string;
   updatedAt: string;
   __v: number;

@@ -68,7 +68,7 @@ const LeftSide = () => {
                 Logout
               </Link>
             ) : (
-              <Link href="login">Login</Link>
+              <Link href="/login">Login</Link>
             )}
           </li>
         </ul>

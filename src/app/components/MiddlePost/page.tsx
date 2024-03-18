@@ -34,7 +34,7 @@ const MiddlePost = () => {
   const [inputImage, setInputImage] = useState<File | string>("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
-  const { data: posts, isFetching } = useAllPostQuery(searchTerm);
+  const { data: posts, isFetching, isLoading } = useAllPostQuery(searchTerm);
   const image_upload_url = `https://api.imgbb.com/1/upload?key=${image_upload_token}`;
 
   // post a image
@@ -273,7 +273,7 @@ const MiddlePost = () => {
       </form>
       <hr className="border-blue-800 border-2" />
       {/* Get All Posts */}
-      <AllPosts posts={posts} isFetching={isFetching} />
+      <AllPosts posts={posts} isFetching={isFetching} isLoading={isLoading} />
       {/* mobile menu */}
       <MobileMenu />
     </div>

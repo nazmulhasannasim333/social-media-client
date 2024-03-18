@@ -65,11 +65,11 @@ const MobileMenu = () => {
           </li>
           <li className="mb-2">
             {user ? (
-              <Link onClick={handleLogout} href="login">
+              <Link onClick={handleLogout} href="/login">
                 Logout
               </Link>
             ) : (
-              <Link href="login">Login</Link>
+              <Link href="/login">Login</Link>
             )}
           </li>
         </ul>

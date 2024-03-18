@@ -182,7 +182,7 @@ const Comment = ({ post }: PostPops) => {
                       <h1 className="text-lg font-semibold">
                         {comment?.userId?.name}
                       </h1>
-                      {comment?.userId?.profileImg && (
+                      {comment?.userId?.isVerified && (
                         <Image
                           width={100}
                           height={100}
