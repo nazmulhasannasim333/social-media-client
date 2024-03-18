@@ -8,13 +8,17 @@ import {
   FaRegBell,
   FaRegBookmark,
   FaUserCheck,
+  FaUsers,
 } from "react-icons/fa";
 import NavLink from "./NavLink";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { FaBook } from "react-icons/fa6";
 
 const Navbar = () => {
   const user = useAppSelector(selectCurrentUser);
+  const isAdmin =
+    (user && user?.role === "admin") || user?.role === "superAdmin";
 
   const navLinks = [
     {
@@ -52,6 +56,16 @@ const Navbar = () => {
       title: "Profile",
       icon: <FaUserCheck />,
     },
+    isAdmin && {
+      path: "/posts",
+      title: "Posts",
+      icon: <FaBook />,
+    },
+    isAdmin && {
+      path: "/users",
+      title: "Users",
+      icon: <FaUsers />,
+    },
     {
       path: "/more",
       title: "More",
@@ -66,19 +80,22 @@ const Navbar = () => {
           NH <span className="text-sky-400">Social</span>
         </Link>
       </div>
-      {navLinks.map((link, index) => (
-        <NavLink
-          key={index}
-          href={link.path}
-          exact={link.path === "/"}
-          activeClassName="bg-blue-800 hover:text-blue-300"
-        >
-          <div className="flex items-center">
-            <p className="me-4 text-2xl">{link?.icon}</p>
-            <p className="text-lg">{link?.title}</p>
-          </div>
-        </NavLink>
-      ))}
+      {navLinks.map(
+        (link, index) =>
+          link && (
+            <NavLink
+              key={index}
+              href={link.path}
+              exact={link.path === "/"}
+              activeClassName="bg-blue-800 hover:text-blue-300"
+            >
+              <div className="flex items-center">
+                <p className="me-4 text-2xl">{link?.icon}</p>
+                <p className="text-lg">{link?.title}</p>
+              </div>
+            </NavLink>
+          )
+      )}
       <button className="bg-blue-400 w-48 mt-5 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full">
         Create Post
       </button>

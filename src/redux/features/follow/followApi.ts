@@ -2,22 +2,13 @@ import { baseApi } from "../../api/baseApi";
 
 const followApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // getAllComment: builder.query({
-    //   query: (postId: string) => ({
-    //     url: `/comments/get-all-comment/${postId}`,
-    //     method: "GET",
-    //   }),
-    //   providesTags: ["comments"],
-    // }),
-    // totalComments: builder.query({
-    //   query: (postId: string) => {
-    //     return {
-    //       url: `comments/get-total-comment/${postId}`,
-    //       method: "GET",
-    //     };
-    //   },
-    //   providesTags: ["comments"],
-    // }),
+    getAllFollowing: builder.query({
+      query: (followingId: string) => ({
+        url: `/follows/get-following/${followingId}`,
+        method: "GET",
+      }),
+      providesTags: ["follow"],
+    }),
     createFollow: builder.mutation({
       query: (followData) => ({
         url: "/follows/create-follow",
@@ -51,4 +42,5 @@ export const {
   useCreateFollowMutation,
   useCheckFollowQuery,
   useRemoveFollowMutation,
+  useGetAllFollowingQuery,
 } = followApi;

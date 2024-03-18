@@ -23,14 +23,13 @@ import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import MobileMenu from "@/app/components/MobileDeviceMenu/page";
 import ProfilePosts from "@/app/components/ProfilePosts";
 import ProfileUpdateModal from "@/app/components/ProfileUpdateModal";
+import { useGetAllFollowingQuery } from "@/redux/features/follow/followApi";
 
 const UserProfile = ({ params }: any) => {
   const user = useAppSelector(selectCurrentUser);
   const { data: userInfo } = useGetUserInfoQuery(params?._id);
-  const { data: userProfilePost, isFetching } = useAllPostByUserIdQuery(
-    params?._id
-  );
-
+  const { data: userProfilePost } = useAllPostByUserIdQuery(params?._id);
+  const { data: followingData } = useGetAllFollowingQuery(params?._id);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -233,7 +232,9 @@ const UserProfile = ({ params }: any) => {
           {/* TODO: Follower and Following functionality will be implement */}
           <div className="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
             <div className="text-center pr-3">
-              <span className="font-bold text-white">520</span>
+              <span className="font-bold text-white">
+                {followingData?.data?.length}
+              </span>
               <span className="text-gray-600"> Following</span>
             </div>
             <div className="text-center px-3">
