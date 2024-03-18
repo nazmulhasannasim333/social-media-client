@@ -7,15 +7,18 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { useGetMeQuery } from "@/redux/features/user/userApi";
 import avatar from "../../../../public/images/avatar.png";
+import { useRouter } from "next/navigation";
 
 const LeftSide = () => {
   const user = useAppSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
   const { data: getMe } = useGetMeQuery(undefined);
+  const router = useRouter();
 
   const handleLogout = () => {
     const toastId = toast.loading("loading...");
     dispatch(logout());
+    router.push("/login");
     toast.success("Logged out", { id: toastId, duration: 2000 });
   };
 
@@ -49,13 +52,19 @@ const LeftSide = () => {
           className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content rounded-box w-52 bg-gray-800 text-white"
         >
           <li className="my-2">
-            <Link href={user ? `/user-profile/${user?.userId}` : "/login"}>
+            <Link
+              href={
+                user && user?.userId
+                  ? `/user-profile/${user?.userId}`
+                  : "/login"
+              }
+            >
               Profile
             </Link>
           </li>
           <li className="mb-2">
             {user ? (
-              <Link onClick={handleLogout} href="login">
+              <Link onClick={handleLogout} href="/login">
                 Logout
               </Link>
             ) : (

@@ -9,6 +9,13 @@ const followApi = baseApi.injectEndpoints({
       }),
       providesTags: ["follow"],
     }),
+    getAllFollower: builder.query({
+      query: (followingId: string) => ({
+        url: `/follows/get-follower/${followingId}`,
+        method: "GET",
+      }),
+      providesTags: ["follow"],
+    }),
     createFollow: builder.mutation({
       query: (followData) => ({
         url: "/follows/create-follow",
@@ -43,4 +50,5 @@ export const {
   useCheckFollowQuery,
   useRemoveFollowMutation,
   useGetAllFollowingQuery,
+  useGetAllFollowerQuery,
 } = followApi;

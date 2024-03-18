@@ -23,13 +23,17 @@ import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import MobileMenu from "@/app/components/MobileDeviceMenu/page";
 import ProfilePosts from "@/app/components/ProfilePosts";
 import ProfileUpdateModal from "@/app/components/ProfileUpdateModal";
-import { useGetAllFollowingQuery } from "@/redux/features/follow/followApi";
+import {
+  useGetAllFollowerQuery,
+  useGetAllFollowingQuery,
+} from "@/redux/features/follow/followApi";
 
 const UserProfile = ({ params }: any) => {
   const user = useAppSelector(selectCurrentUser);
   const { data: userInfo } = useGetUserInfoQuery(params?._id);
   const { data: userProfilePost } = useAllPostByUserIdQuery(params?._id);
   const { data: followingData } = useGetAllFollowingQuery(params?._id);
+  const { data: followerData } = useGetAllFollowerQuery(params?._id);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -178,7 +182,8 @@ const UserProfile = ({ params }: any) => {
                 <FaUserMd />
                 <span className="leading-5 ml-2 text-slate-300">
                   {userInfo?.data?.gender ? (
-                    userInfo?.data?.gender
+                    userInfo?.data?.gender.charAt(0).toUpperCase() +
+                    userInfo?.data?.gender.slice(1)
                   ) : (
                     <span className="text-gray-500">Not Added</span>
                   )}
@@ -238,7 +243,9 @@ const UserProfile = ({ params }: any) => {
               <span className="text-gray-600"> Following</span>
             </div>
             <div className="text-center px-3">
-              <span className="font-bold text-white">2.4m </span>
+              <span className="font-bold text-white">
+                {followerData?.data?.length}
+              </span>
               <span className="text-gray-600"> Followers</span>
             </div>
           </div>
