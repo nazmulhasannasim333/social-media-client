@@ -1,3 +1,4 @@
+"use client";
 import { logout, selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { useGetMeQuery } from "@/redux/features/user/userApi";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
