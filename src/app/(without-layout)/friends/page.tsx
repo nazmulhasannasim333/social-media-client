@@ -1,6 +1,6 @@
 import WorkingPage from "../../components/WorkingPage/WorkingPage";
 
-const ListsPage = () => {
+const FriendsPage = () => {
   return (
     <div>
       <WorkingPage />
@@ -8,4 +8,4 @@ const ListsPage = () => {
   );
 };
 
-export default ListsPage;
+export default FriendsPage;

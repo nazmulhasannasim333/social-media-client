@@ -8,6 +8,7 @@ import {
   FaRegBell,
   FaRegBookmark,
   FaUserCheck,
+  FaUserFriends,
   FaUsers,
 } from "react-icons/fa";
 import NavLink from "./NavLink";
@@ -47,9 +48,9 @@ const Navbar = () => {
       icon: <FaRegBookmark />,
     },
     {
-      path: "/lists",
-      title: "Lists",
-      icon: <FaClipboardList />,
+      path: "/friends",
+      title: "Friends",
+      icon: <FaUserFriends />,
     },
     {
       path: `/user-profile/${user?.userId}`,
