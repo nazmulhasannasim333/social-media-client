@@ -65,7 +65,7 @@ const AllPosts = ({
               <div className="ml-3">
                 <div className="flex items-center gap-1">
                   <p className="text-base leading-6 font-medium text-white cursor-pointer">
-                    <Link href={`/user-profile/${post?._id}`}>
+                    <Link href={`/user-profile/${post?.userId?._id}`}>
                       {post?.userId?.name}
                     </Link>
                   </p>

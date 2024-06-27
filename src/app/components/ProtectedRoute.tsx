@@ -15,7 +15,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     toast.success("Logged out", { duration: 2000 });
     return null;
   } else {
-    console.log(children);
     return children;
   }
 };

@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useState } from "react";
 import avatar from "../../../../public/images/avatar.png";
 import FollowButton from "../FollowButton";
+import Link from "next/link";
 
 const RightSide = () => {
   const CustomDate: Date = new Date();
@@ -36,7 +37,7 @@ const RightSide = () => {
   return (
     <div className="lg:col-span-2 h-screen overflow-y-auto sticky top-0 block">
       {/*right menu*/}
-      <div className="max-w-6xl rounded-lg bg-gray-700 overflow-hidden shadow-lg ms-4 my-4">
+      <div className="rounded-lg bg-gray-700 overflow-hidden shadow-lg ms-4 my-4">
         <div className="flex">
           <div className="flex-1 m-2">
             <h2 className="px-4 py-2 text-xl w-48 font-semibold text-white">
@@ -52,26 +53,29 @@ const RightSide = () => {
         >
           {displayedUsers?.map((rUser: TUser) => (
             <div key={rUser._id}>
-              <div className="flex items-center py-4">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 ml-2">
-                    <Image
-                      height={50}
-                      width={50}
-                      src={rUser.profileImg ? rUser.profileImg : avatar}
-                      alt=""
-                      className="w-full h-full rounded-full"
-                    />
+              <div className="flex items-center justify-between py-4">
+                <Link href={`/user-profile/${rUser?._id}`}>
+                  <div className="flex pe-5">
+                    <div className="w-10 h-10 ml-2">
+                      <Image
+                        height={50}
+                        width={50}
+                        src={rUser.profileImg ? rUser.profileImg : avatar}
+                        alt=""
+                        className="w-full h-full rounded-full"
+                      />
+                    </div>
+                    <div className="ms-3">
+                      <p className="text-[17px] font-semibold text-white">
+                        {rUser?.name}
+                      </p>
+                      <p className="text-[14px] text-gray-400 whitespace-normal break-all w-[120px]">
+                        {rUser?.username}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-col mx-2">
-                  <p className="text-[17px] font-semibold text-white">
-                    {rUser?.name}
-                  </p>
-                  <p className="text-[14px] text-gray-400">{rUser?.username}</p>
-                </div>
-                <div className="flex-grow"></div>
-                <div className="mx-2">
+                </Link>
+                <div className="mx-4">
                   <FollowButton rUser={rUser} />
                 </div>
               </div>

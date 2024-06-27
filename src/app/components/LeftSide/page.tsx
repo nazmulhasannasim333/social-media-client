@@ -40,10 +40,10 @@ const LeftSide = () => {
           </label>
           <div className="ml-3">
             <p className="text-base leading-6 font-medium text-white">
-              {user && user?.name ? user?.name : "Your Name"}
+              {getMe ? getMe?.data?.name : "Your Name"}
             </p>
             <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-              @{user && user?.username ? user?.username : "demo_username"}
+              @{getMe ? getMe?.data?.username : "your_username"}
             </p>
           </div>
         </div>

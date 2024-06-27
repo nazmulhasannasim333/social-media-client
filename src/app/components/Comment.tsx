@@ -15,7 +15,7 @@ import {
   useTotalCommentsQuery,
 } from "@/redux/features/comment/commentApi";
 import verified from "../../../public/images/verified.png";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import Swal from "sweetalert2";

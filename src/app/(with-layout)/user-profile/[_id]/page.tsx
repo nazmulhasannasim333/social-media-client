@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaArrowLeft,
   FaBookReader,
@@ -24,9 +25,14 @@ import MobileMenu from "@/app/components/MobileDeviceMenu/page";
 import ProfilePosts from "@/app/components/ProfilePosts";
 import ProfileUpdateModal from "@/app/components/ProfileUpdateModal";
 import {
+  useCheckFollowQuery,
+  useCreateFollowMutation,
   useGetAllFollowerQuery,
   useGetAllFollowingQuery,
+  useRemoveFollowMutation,
 } from "@/redux/features/follow/followApi";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 const UserProfile = ({ params }: any) => {
   const user = useAppSelector(selectCurrentUser);
@@ -35,6 +41,47 @@ const UserProfile = ({ params }: any) => {
   const { data: followingData } = useGetAllFollowingQuery(params?._id);
   const { data: followerData } = useGetAllFollowerQuery(params?._id);
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const { data: checkFollow } = useCheckFollowQuery(user?.userId || "");
+  const [addFollow] = useCreateFollowMutation();
+  const [removeFollow] = useRemoveFollowMutation();
+  const [isFollow, setIsFollow] = useState(false);
+
+  const handleFollow = async (followerUserId: string) => {
+    if (!user) {
+      Swal.fire({
+        title: "Please Login first then follow",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sign In",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
+      });
+    } else {
+      const followData = { followingUserId: user?.userId, followerUserId };
+
+      if (!isFollow) {
+        // Create a follow
+        await addFollow(followData);
+        setIsFollow(true);
+      } else {
+        // Remove follow
+        const res = await removeFollow(followData);
+        setIsFollow(false);
+      }
+    }
+  };
+
+  //  check current logged user follow witch users
+  useEffect(() => {
+    const followedFields = checkFollow?.data?.map((follow: any) => follow);
+    const checkFollowed = followedFields?.includes(params?._id);
+    setIsFollow(checkFollowed);
+  }, [checkFollow, params._id]);
 
   return (
     <div className="col-span-4 h-auto border border-y-0 border-gray-800">
@@ -117,8 +164,11 @@ const UserProfile = ({ params }: any) => {
               </div>
             ) : (
               <div className="flex flex-col text-right">
-                <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                  Follow
+                <button
+                  onClick={() => handleFollow(params._id)}
+                  className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto"
+                >
+                  {isFollow ? "Unfollow" : "Follow"}
                 </button>
               </div>
             )}
@@ -234,7 +284,6 @@ const UserProfile = ({ params }: any) => {
               </span>
             </div>
           </div>
-          {/* TODO: Follower and Following functionality will be implement */}
           <div className="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
             <div className="text-center pr-3">
               <span className="font-bold text-white">
