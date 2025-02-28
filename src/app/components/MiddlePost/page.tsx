@@ -2,7 +2,7 @@
 import { useGetMeQuery } from "@/redux/features/user/userApi";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { BsCameraVideo, BsEmojiLaughing } from "react-icons/bs";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
@@ -36,6 +36,15 @@ const MiddlePost = () => {
   const router = useRouter();
   const { data: posts, isFetching, isLoading } = useAllPostQuery(searchTerm);
   const image_upload_url = `https://api.imgbb.com/1/upload?key=${image_upload_token}`;
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+   const handle = setTimeout(() => {
+      setSearchTerm(e.target.value);
+   }, 1000);
+    return () => {
+      clearTimeout(handle);
+    };
+  }
 
   // post a image
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,7 +168,7 @@ const MiddlePost = () => {
             <FaSearch />
           </button>
           <input
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => handleSearch(e)}
             type="search"
             name="search"
             placeholder="Search NH Social"
