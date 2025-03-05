@@ -25,7 +25,7 @@ const Chat: React.FC = () => {
   return (
     <div className="flex flex-col h-[600px] w-[500px] max-w-lg border border-gray-300 rounded-lg overflow-hidden">
       <header className="p-4 bg-gray-800 text-white text-center">
-        <h1>Chat with Md Nasim Hosen</h1>
+        <h1>Md Nasim Hosen</h1>
       </header>
       <div className="flex-1 p-4 overflow-y-auto flex flex-col bg-gray-700">
         {messages.map((message, index) => (
