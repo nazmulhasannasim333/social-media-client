@@ -38,8 +38,6 @@ const Comment = ({ post }: PostPops) => {
   const [showEmoji, setShowEmoji] = useState(false);
   const { handleSubmit } = useForm();
 
-  console.log("allComment", allComment);
-
   // add emoji in comment box
   const addEmoji = (e: { native: string }) => {
     const emoji = e.native;
