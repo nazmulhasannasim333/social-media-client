@@ -168,17 +168,19 @@ const Comment = ({ post }: PostPops) => {
               <div className="bg-slate-800 inline-block ps-2 py-2 mx-2 mb-3 rounded-lg pr-5">
                 <div className="flex">
                   <div>
-                    <Image
-                      height={100}
-                      width={100}
-                      className="inline-block h-8 w-8 rounded-full"
-                      src={
-                        comment?.userId?.profileImg
-                          ? comment?.userId?.profileImg
-                          : avatar
-                      }
-                      alt=""
-                    />
+                    <Link href={`/user-profile/${comment?.userId?._id}`}>
+                      <Image
+                        height={100}
+                        width={100}
+                        className="inline-block h-8 w-8 rounded-full"
+                        src={
+                          comment?.userId?.profileImg
+                            ? comment?.userId?.profileImg
+                            : avatar
+                        }
+                        alt=""
+                      />
+                    </Link>
                   </div>
                   <div className="ms-3">
                     <div className="flex items-center gap-x-1">
