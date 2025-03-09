@@ -20,6 +20,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type PostPops = {
   post: TPost;
@@ -36,6 +37,8 @@ const Comment = ({ post }: PostPops) => {
   const [inputValue, setInputValue] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
   const { handleSubmit } = useForm();
+
+  console.log("allComment", allComment);
 
   // add emoji in comment box
   const addEmoji = (e: { native: string }) => {
@@ -179,9 +182,11 @@ const Comment = ({ post }: PostPops) => {
                   </div>
                   <div className="ms-3">
                     <div className="flex items-center gap-x-1">
-                      <h1 className="text-lg font-semibold">
-                        {comment?.userId?.name}
-                      </h1>
+                      <Link href={`/user-profile/${comment?.userId?._id}`}>
+                        <h1 className="text-lg font-semibold">
+                          {comment?.userId?.name}
+                        </h1>
+                      </Link>
                       {comment?.userId?.isVerified && (
                         <Image
                           width={100}
